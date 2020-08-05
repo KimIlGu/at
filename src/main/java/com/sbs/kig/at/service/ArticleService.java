@@ -44,13 +44,14 @@ public class ArticleService {
 		Map<String, Object> rs = new HashMap<>();
 
 		rs.put("resultCode", "S-1");
-		rs.put("msg", String.format("%d번 게시물이 생성되었습니다.", id));
+		rs.put("msg", String.format("%d번 게시물이 수정되었습니다.", id));
 
 		return rs;
 	}
 
 	public Map<String, Object> deleteArticle(int id) {
 		articleDao.deleteArticle(id);
+		
 		Map<String, Object> rs = new HashMap<>();
 
 		rs.put("resultCode", "S-1");
@@ -59,7 +60,7 @@ public class ArticleService {
 		return rs;
 	}
 
-	public void hitUp(long id) {
+	public void hitUp(int id) {
 		articleDao.hitUp(id);
 	}
 	
@@ -67,11 +68,11 @@ public class ArticleService {
 		return articleDao.getForPrintArticles(page, itemsInAPage, searchKeywordType, searchKeyword); 
 	}
 
-	public Article getArticleByNext(long id) {
+	public Article getArticleByNext(int id) {
 		return articleDao.getArticleByNext(id); 
 	}
 
-	public Article getArticleByPrev(long id) {
+	public Article getArticleByPrev(int id) {
 		return articleDao.getArticleByPrev(id);
 	}
 
@@ -79,10 +80,11 @@ public class ArticleService {
 		articleDao.writeArticleReply(param);
 		
 		int id = CUtil.getAsInt(param.get("id"));
+		
 		Map<String, Object> rs = new HashMap<>();
 
 		rs.put("resultCode", "S-1");
-		rs.put("msg", String.format("%d번 게시물 댓글이 생성되었습니다.", id));
+		rs.put("msg", String.format("%d번 게시물 댓글이 생성되었습니다.", id) );
 		
 		return rs;
 	}
@@ -93,6 +95,7 @@ public class ArticleService {
 
 	public Map<String, Object> deleteArticleReply(int id) {
 		articleDao.deleteArticleReply(id);
+		
 		Map<String, Object> rs = new HashMap<>();
 
 		rs.put("resultCode", "S-1");
@@ -107,12 +110,13 @@ public class ArticleService {
 
 	public Map<String, Object> modifyReply(Map<String, Object> param) {
 		articleDao.modifyArticleReply(param);
+		
 		int id = CUtil.getAsInt(param.get("id"));
 		Map<String, Object> rs = new HashMap<>();
 
 		rs.put("resultCode", "S-1");
 		rs.put("msg", String.format("%d번 게시물 댓글이 수정되었습니다.", id));
-
+		
 		return rs;
 	}
 	

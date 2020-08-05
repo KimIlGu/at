@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sbs.kig.at.dto.Article;
 import com.sbs.kig.at.dto.ArticleReply;
@@ -115,13 +114,12 @@ public class ArticleController {
 	}
 	
 	@RequestMapping("article/doWriteReply")
-	public String doWriteReply(Model model, @RequestParam Map<String, Object> param) {
-
+	public String doWriteReply(Model model, @RequestParam Map<String, Object> param, int articleId) {
 		Map<String, Object> rs = articleService.writeReply(param);
 
 		String msg = (String) rs.get("msg");
-		String redirectUrl = (String) param.get("redirectUrl");
-
+		String redirectUrl = "./detail?id=" + articleId;
+		
 		model.addAttribute("alertMsg", msg);
 		model.addAttribute("locationReplace", redirectUrl);
 
@@ -129,12 +127,12 @@ public class ArticleController {
 	}
 	
 	@RequestMapping("article/doDeleteReply")
-	public String doDeleteReply(Model model, int id, String redirectUrl) {
-
+	public String doDeleteReply(Model model, @RequestParam Map<String, Object> param, int id, int articleId) {
 		Map<String, Object> rs = articleService.deleteArticleReply(id);
 
 		String msg = (String) rs.get("msg");
-
+		String redirectUrl = (String) param.get("redirectUrl");
+		
 		model.addAttribute("alertMsg", msg);
 		model.addAttribute("locationReplace", redirectUrl);
 
@@ -164,14 +162,4 @@ public class ArticleController {
 
 		return "common/redirect";
 	}
-	
-	@RequestMapping("article/doWriteReplyAjax")
-	@ResponseBody
-	public Map<String, Object> doWriteReplyAjax(@RequestParam Map<String, Object> param) {
-		Map<String, Object> rs = articleService.writeReply(param);
-
-		return rs;
-	}
-	
-
 }

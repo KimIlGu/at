@@ -7,7 +7,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="/resource/common.css">
+<link rel="stylesheet" href="/resource/css/common.css">
+<link rel="stylesheet" href="/resource/js/common.js">
 
 <title>커뮤니티 사이트 - ${pageName}</title>
 

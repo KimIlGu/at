@@ -20,23 +20,23 @@ public interface ArticleDao {
 
 	void deleteArticle(@Param("id") int id);
 
-	void hitUp(long id);
+	void hitUp(@Param("id") int id);
 	
 	int getTotalCount(String searchKeywordType, String searchKeyword);
 
 	List<Article> getForPrintArticles(@Param("id") int page, @Param("id") int itemsInAPage, String searchKeywordType, String searchKeyword);
 
-	Article getArticleByNext(long id);
+	Article getArticleByNext(@Param("id") int id);
 
-	Article getArticleByPrev(long id);
+	Article getArticleByPrev(@Param("id") int id);
 
 	void writeArticleReply(Map<String, Object> param);
 
 	List<ArticleReply> getForPrintArticleReplies(@Param("articleId") int articleId);
 
-	void deleteArticleReply(int id);
+	void deleteArticleReply(@Param("id") int id);
 
-	ArticleReply getForPrintArticleReply(int id);
+	ArticleReply getForPrintArticleReply(@Param("id") int id);
 
 	void modifyArticleReply(Map<String, Object> param);
 

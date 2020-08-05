@@ -77,7 +77,8 @@
 	}
 </script>
 
-<form action="" onsubmit="WriteReply__submitForm(this); return false;">
+<form action="./doWriteReply" onsubmit="WriteReply__submitForm(this); return false;">
+	<input type="hidden" name="articleId" value="${param.id}">
 	<div class="table-box con">
 		<table>
 			<tbody>
@@ -123,8 +124,8 @@
 					<td>${articleReply.regDate}</td>
 					<td>${articleReply.body}</td>
 					<td>
-						<a href="./doDeleteReply?id=${articleReply.id}&redirectUrl=${urlEncodedRequestUriQueryString}" onclick="if ( confirm('삭제하시겠습니까?') == false ) { return false; }">삭제</a>
-						<a href="./modifyReply?id=${articleReply.id}&redirectUrl=${urlEncodedRequestUriQueryString}">수정</a>
+						<a href="./doDeleteReply?id=${articleReply.id}&redirectUrl=${EncodedUrllPassword}" onclick="if ( confirm('삭제하시겠습니까?') == false ) { return false; }">삭제</a>
+						<a href="./modifyReply?id=${articleReply.id}&redirectUrl=${EncodedUrllPassword}">수정</a>
 					</td>
 				</tr>
 			</c:forEach>
