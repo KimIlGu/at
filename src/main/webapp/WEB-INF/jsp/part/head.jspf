@@ -1,0 +1,26 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/resource/common.css">
+
+<title>커뮤니티 사이트 - ${pageName}</title>
+
+</head>
+
+<body>
+	<h1 class="con">${pageName}</h1>
+
+	<div class="menu-bar con">
+		<ul>
+			<li class="li" style="display:inline-block"><a href="../home/main">Home</a></li>
+			<li class="li" style="display:inline-block"><a href="../article/list">Articles</a></li>
+		</ul>
+	</div>	
+	
+	<main> 
