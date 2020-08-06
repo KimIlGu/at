@@ -5,6 +5,24 @@
 <c:set var="pageTitle" value="게시물 상세보기"></c:set>
 <%@ include file="../part/head.jspf"%>	
 
+<style>
+.article-reply-list-box tr .loading-inline {
+	display:none;
+	font-weit:bold;
+	color:red;
+}
+.article-reply-list-box tr[data-loading="Y"] .loading-none {
+	display:none;
+}
+.article-reply-list-box tr[data-loading="Y"] .loading-inline {
+	display:inline;
+}
+</style>
+
+<script>
+	var id = parseInt('${article.id}');
+</script>
+
 <h2 class="con">게시물 상세보기</h2>
 
 <div class="table-box con">
@@ -55,7 +73,7 @@
 <h2 class="con">댓글 작성</h2>
 
 <script>
-	function WriteReply__submitForm(form) {
+	function ArticleReply__submitWriteForm(form) {
 		form.body.value = form.body.value.trim();
 		if (form.body.value.length == 0) {
 			alert('댓글을 입력해주세요.');
@@ -65,19 +83,15 @@
 		$.post('./doWriteReplyAjax', {
 			articleId : param.id,
 			body : form.body.value
-		}, function(data) {
-			if (data.msg) {
-				alert(data.msg);
-			}
-			if ( data.resultCode.substr(0, 2) == 'S-' ) {
-				location.reload(); // 임시
-			}
+
+			ArticleReply__lastLoadedArticleReplyId = articleReply.id;
+		} 
+		setTimeout(ArticleReply__loadList, ArticleReply__loadListDelay);
 		}, 'json');
-		form.body.value = '';
 	}
 </script>
 
-<form action="./doWriteReply" onsubmit="WriteReply__submitForm(this); return false;">
+<form action="./doWriteReply" onsubmit="ArticleReply__submitForm(this); return false;">
 	<input type="hidden" name="articleId" value="${param.id}">
 	<div class="table-box con">
 		<table>
@@ -85,7 +99,7 @@
 				<tr>
 					<th>내용</th>
 					<td>
-						<textarea class="height-100px" name="body" placeholder="내용을 입력해주세요."></textarea>
+						<textarea maxlength="300" class="height-100px" name="body" placeholder="내용을 입력해주세요."></textarea>
 					</td>
 				</tr>
 				<tr>
@@ -101,7 +115,92 @@
 
 <h2 class="con">댓글 리스트</h2>
 
-<div class="table-box con">
+<script>
+	var ArticleReply__lastLoadedArticleReplyId = 0;
+	
+	function ArticleReply__loadList() {
+		$.get('./getForPrintArticleRepliesRs', {
+			id : param.id
+			from : ArticleReply__lastLoadedArticleReplyId + 1
+			ajax : 'Y'
+		}, function(data) {
+			data.articleReplies = data.articleReplies.reverse();
+			
+			for (var i = 0; i < data.articleReplies.length; i++) {
+				var articleReply = data.articleReplies[i];
+				ArticleReply__drawReply(articleReply);
+				ArticleReply__lastLoadedArticleReplyId = articleReply.id;
+			}
+			setTimeout(ArticleReply__loadList, 1000);
+		}, 'json');
+	}
+	
+	var ArticleReply__$listTbody;
+	
+	function ArticleReply__drawReply(articleReply) {
+		var html = $('.template-box-1 tbody').html();
+
+		html = replaceAll(html, "{$번호}", articleReply.id);
+		html = replaceAll(html, "{$날짜}", articleReply.regDate);
+		html = replaceAll(html, "{$내용}", articleReply.body);
+		
+		/*
+		html = '<tr data-article-reply-id="' + articleReply.id + '">';
+		html += '<td>' + articleReply.id + '</td>';
+		html += '<td>' + articleReply.regDate + '</td>';
+		html += '<td>' + articleReply.body + '</td>';
+		html += '<td>';
+		html += '<a href="#">삭제</a>';
+		html += '<a href="#">수정</a>';
+		html += '</td>';
+		html += '</tr>';
+		*/
+		
+		ArticleReply__$listTbody.prepend(html);
+	}
+	
+	$(function() {
+		ArticleReply__$listTbody = $('.article-reply-list-box > table tbody');
+		ArticleReply__loadList();
+	});
+
+	function ArticleReply__delete(obj) {
+		var $clickedBtn = $(obj);
+		var $tr = $clickedBtn.closest('tr');
+		var replyId = parseInt($tr.attr('data-article-reply-id'));
+		$tr.attr('data-loading', 'Y');
+		$.post(
+			'./doDeleteReplyAjax',
+			{
+				id: replyId
+			},
+			function(data) {
+				$tr.remove();
+				$tr.attr('data-loading', 'N');
+			},
+			'json'
+		);
+	}
+</script>
+
+<div class="template-box template-box-1">
+	<table border="1">
+		<tbody>
+			<tr data-article-reply-id="{$번호}">
+				<td>{$번호}</td>
+				<td>{$날짜}</td>
+				<td>{$내용}</td>
+				<td>
+					<span class="loading-inline">삭제중입니다...</span>
+					<a href="./doDeleteReply?id=${articleReply.id}&articleId=${param.id}"class="loading-none" onclick="if ( confirm('정말 삭제하시겠습니까?') ) { ArticleReply__delete(this); } return false;">삭제</a>
+					<a href="./modifyReply?id=${articleReply.id}&articleId=${param.id}" class="loading-none" onclick="return false;">수정</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<div class="article-reply-list-box table-box con">
 	<table>
 		<colgroup>
 			<col width="80">
@@ -118,6 +217,7 @@
 			</tr>
 		</thead>
 		<tbody>
+			<%--
 			<c:forEach items="${articleReplies}" var="articleReply">
 				<tr>
 					<td>${articleReply.id}</td>
@@ -129,6 +229,7 @@
 					</td>
 				</tr>
 			</c:forEach>
+			--%>
 		</tbody>
 	</table>
 </div>

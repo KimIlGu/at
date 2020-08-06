@@ -104,7 +104,7 @@
 		displayStatus = 1
   </insert>
 	
-  <select id="getForPrintArticleReplies" resultType="articleReply">
+  <select id="getForPrintArticleRepliesFrom" resultType="articleReply">
 		SELECT *
 		FROM articleReply 
 		WHERE articleId = #{articleId}
@@ -132,5 +132,5 @@
 		</set>
 		WHERE id = #{id}
   </update>
-	
+
 </mapper>

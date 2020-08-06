@@ -90,7 +90,7 @@ public class ArticleService {
 	}
 	
 	public List<ArticleReply> getForPrintArticleReplies(int articleId) {
-		return articleDao.getForPrintArticleReplies(articleId);
+		return articleDao.getForPrintArticleRepliesFrom(articleId);
 	}
 
 	public Map<String, Object> deleteArticleReply(int id) {
@@ -119,6 +119,7 @@ public class ArticleService {
 		
 		return rs;
 	}
+
 	
 	
 }

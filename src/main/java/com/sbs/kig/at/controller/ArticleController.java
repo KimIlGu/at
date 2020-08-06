@@ -1,5 +1,6 @@
 package com.sbs.kig.at.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sbs.kig.at.dto.Article;
 import com.sbs.kig.at.dto.ArticleReply;
@@ -32,7 +34,7 @@ public class ArticleController {
 		
 		model.addAttribute("alertMsg", msg);
 		model.addAttribute("locationReplace", redirectUrl);
-
+		
 		return "common/redirect";
 	}
 	
@@ -126,16 +128,23 @@ public class ArticleController {
 		return "common/redirect";
 	}
 	
+	@RequestMapping("article/doWriteReplyAjax")
+	@ResponseBody
+	public Map<String, Object> doWriteReplyAjax(@RequestParam Map<String, Object> param) {
+		Map<String, Object> rs = articleService.writeReply(param);
+		return rs;
+	}
+	
 	@RequestMapping("article/doDeleteReply")
 	public String doDeleteReply(Model model, @RequestParam Map<String, Object> param, int id, int articleId) {
 		Map<String, Object> rs = articleService.deleteArticleReply(id);
 
 		String msg = (String) rs.get("msg");
-		String redirectUrl = (String) param.get("redirectUrl");
-		
+		String redirectUrl = "./detail?id=" + articleId;
+
 		model.addAttribute("alertMsg", msg);
 		model.addAttribute("locationReplace", redirectUrl);
-
+		
 		return "common/redirect";
 	}
 	
@@ -150,16 +159,39 @@ public class ArticleController {
 	}
 	
 	@RequestMapping("article/doModifyReply")
-	public String doModifyReply(Model model, @RequestParam Map<String, Object> param) {
+	public String doModifyReply(Model model, @RequestParam Map<String, Object> param, int articleId) {
 
 		Map<String, Object> rs = articleService.modifyReply(param);
 
 		String msg = (String) rs.get("msg");
-		String redirectUrl = (String) param.get("redirectUrl");
+		String redirectUrl = "./detail?id=" + articleId;
 
 		model.addAttribute("alertMsg", msg);
 		model.addAttribute("locationReplace", redirectUrl);
+		
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
 		return "common/redirect";
 	}
+	
+	@RequestMapping("article/getForPrintArticleRepliesRs")
+	@ResponseBody
+	public Map<String, Object> getForPrintArticleRepliesRs(int id) {
+		List<ArticleReply> articleReplies = articleService.getForPrintArticleReplies(id);
+
+		Map<String, Object> rs = new HashMap<>();
+		rs.put("resultCode", "S-1");
+		rs.put("msg", String.format("총 %d개의 댓글이 있습니다.", articleReplies.size()));
+		rs.put("articleReplies", articleReplies);
+
+		return rs;
+	}
+	
+	
+	
+
 }

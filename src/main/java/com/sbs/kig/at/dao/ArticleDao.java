@@ -32,7 +32,7 @@ public interface ArticleDao {
 
 	void writeArticleReply(Map<String, Object> param);
 
-	List<ArticleReply> getForPrintArticleReplies(@Param("articleId") int articleId);
+	List<ArticleReply> getForPrintArticleRepliesFrom(@Param("articleId") int articleId);
 
 	void deleteArticleReply(@Param("id") int id);
 
@@ -40,5 +40,4 @@ public interface ArticleDao {
 
 	void modifyArticleReply(Map<String, Object> param);
 
-	
 }

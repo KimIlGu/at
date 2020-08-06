@@ -10,6 +10,8 @@
 <link rel="stylesheet" href="/resource/css/common.css">
 <link rel="stylesheet" href="/resource/js/common.js">
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
 <title>커뮤니티 사이트 - ${pageName}</title>
 
 </head>

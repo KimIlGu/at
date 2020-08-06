@@ -26,13 +26,15 @@
 			<col width="80">
 			<col width="180">
 			<col>
-			<col width="200">
+			<col width="80">
+			<col width="100">
 		</colgroup>
 		<thead>
 			<tr>
 				<th>번호</th>
 				<th>날짜</th>
 				<th>제목</th>
+				<th>조회수</th>
 				<th>비고</th>
 			</tr>
 		</thead>
@@ -42,10 +44,12 @@
 					<td>${article.id}</td>
 					<td>${article.regDate}</td>
 					<td><a href="./detail?id=${article.id}">${article.title}</a></td>
+					<td>${article.hit}</td>
 					<td>
 						<a href="./doDelete?id=${article.id}" onclick="if ( confirm('삭제하시겠습니까?') == false ) { return false;}">삭제</a>
 						<a href="./modify?id=${article.id}">수정</a>
 					</td>
+					
 				</tr>
 			</c:forEach>
 		</tbody>
